@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanjivani ME Labs – Interactive Portal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: #f5f9ff;
+      color: #1e2a3a;
+    }
+
+    /* main container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 40px;
+    }
+
+    /* header */
+    .main-header {
+      background: linear-gradient(145deg, #0a2f6c, #1b4a8b);
+      color: white;
+      padding: 2.5rem 2rem;
+      border-radius: 0 0 40px 40px;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 20, 50, 0.2);
+    }
+
+    .main-header h1 {
+      font-size: 2.8rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .main-header h1 small {
+      font-size: 1.2rem;
+      font-weight: 300;
+      opacity: 0.85;
+    }
+
+    .main-header .subhead {
+      font-size: 1.15rem;
+      margin-top: 12px;
+      opacity: 0.9;
+      max-width: 800px;
+      line-height: 1.5;
+    }
+
+    /* about section (intro) */
+    .intro-card {
+      background: white;
+      border-radius: 28px;
+      padding: 2rem 2.2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      margin-bottom: 2.8rem;
+      border: 1px solid #eef3fc;
+    }
+
+    .intro-card h2 {
+      color: #0a2f6c;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      border-left: 6px solid #1b4a8b;
+      padding-left: 18px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .intro-item {
+      background: #f0f6fe;
+      border-radius: 18px;
+      padding: 1.2rem 1.2rem 1.2rem 1.8rem;
+      transition: 0.2s;
+    }
+
+    .intro-item strong {
+      display: block;
+      font-size: 1.1rem;
+      color: #0f3b7a;
+      margin-bottom: 6px;
+    }
+
+    .intro-item p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #2c3e50;
+    }
+
+    /* lab grid tabs */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      margin: 2rem 0 3rem;
+    }
+
+    .lab-tab {
+      background: white;
+      padding: 1rem 0.8rem;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: 600;
+      color: #0a2f6c;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      border: 1px solid #dce5f2;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+    }
+
+    .lab-tab:hover {
+      background: #0a2f6c;
+      color: white;
+      border-color: #0a2f6c;
+      transform: scale(1.02);
+    }
+
+    .lab-tab.active {
+      background: #0a2f6c;
+      color: white;
+      border-color: #0a2f6c;
+    }
+
+    /* detail section (single lab) */
+    .lab-detail {
+      background: white;
+      border-radius: 32px;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+      margin: 1.5rem 0 2rem;
+      border: 1px solid #e6edf8;
+      display: none;
+    }
+
+    .lab-detail.active {
+      display: block;
+    }
+
+    .lab-detail h2 {
+      font-size: 2rem;
+      color: #0a2f6c;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .lab-detail .subtitle {
+      color: #4a5f7a;
+      font-weight: 500;
+      margin-bottom: 1.8rem;
+      border-bottom: 2px solid #eef3fc;
+      padding-bottom: 0.8rem;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .detail-text {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-text p {
+      line-height: 1.6;
+      color: #1f2a3f;
+    }
+
+    .detail-text .info-block {
+      background: #f8faff;
+      padding: 1rem 1.4rem;
+      border-radius: 20px;
+      border-left: 5px solid #1b4a8b;
+    }
+
+    .detail-text .info-block strong {
+      color: #0a2f6c;
+    }
+
+    .detail-images {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-images img {
+      width: 100%;
+      height: auto;
+      max-height: 350px;
+      object-fit: cover;
+      border-radius: 20px;
+      background: #eef3fc;
+      border: 1px solid #dce5f2;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .detail-images .img-placeholder {
+      background: linear-gradient(130deg, #dce5f2, #f0f6fe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3a5a7a;
+      font-weight: 500;
+      height: 160px;
+      border-radius: 20px;
+    }
+
+    .equipment-tag {
+      display: inline-block;
+      background: #e9f0fa;
+      border-radius: 40px;
+      padding: 0.4rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #0f3b7a;
+      margin-right: 8px;
+      margin-bottom: 6px;
+    }
+
+    .safety-box {
+      background: #fff6e5;
+      border-radius: 18px;
+      padding: 1rem 1.4rem;
+      margin-top: 12px;
+      border-left: 5px solid #e67e22;
+    }
+
+    /* about footer */
+    .about-footer {
+      background: #0a2f6c;
+      color: white;
+      border-radius: 40px 40px 0 0;
+      padding: 2.2rem 2.5rem;
+      margin-top: 3rem;
+    }
+
+    .about-footer h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .about-footer p {
+      line-height: 1.7;
+      opacity: 0.9;
+      max-width: 900px;
+    }
+
+    .about-footer .dept-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .about-footer .dept-info div {
+      background: rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 1rem 1.8rem;
+    }
+
+    /*Aboutus section*/
+    .about-project {
+      background: linear-gradient(145deg, #0a324f, #153b63);
+      color: #ffffff;
+      /* match about-footer sizing and corners */
+      border-radius: 40px;
+      padding: 2.2rem 2.5rem;
+      margin: 3rem auto 0;
+      max-width: 1400px;
+      box-shadow: 0 14px 34px rgba(8,36,68,0.22);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      overflow: hidden;
+    }
+
+    .about-project:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 26px 56px rgba(8,36,68,0.28);
+    }
+
+    .about-project .project-title {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .about-project h3 {
+      font-size: 1.5rem;
+      margin: 0;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .about-project p.lead {
+      margin-top: 0.6rem;
+      line-height: 1.55;
+      opacity: 0.95;
+      color: rgba(255,255,255,0.95);
+      max-width: 1000px;
+    }
+
+    .about-project .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin: 1rem 0 1.4rem;
+    }
+
+    .about-project .meta-item {
+      background: rgba(255,255,255,0.04);
+      padding: 0.65rem 0.9rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.94);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .about-project .meta-item strong { display:block; font-weight:600; margin-bottom:6px; color:#eaf6ff; }
+
+    .project-members {
+      margin-top: 0.8rem;
+      overflow-x: auto;
+      border-radius: 10px;
+      padding: 0.4rem;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .project-members table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    .project-members th,
+    .project-members td {
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 1px dashed rgba(255,255,255,0.06);
+    }
+
+    .project-members thead th {
+      background: rgba(255,255,255,0.04);
+      font-weight: 600;
+      color: #f2fbff;
+    }
+
+    .project-members tbody tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .project-members a {
+      color: #bfe8ff;
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(191,232,255,0.25);
+    }
+    .project-members a:hover { color: #eaf6ff; }
+
+    @media (max-width: 700px) {
+      .main-header h1 { font-size: 2rem; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .lab-detail { padding: 1.2rem; border-radius: 20px; }
+      .intro-card { padding: 1.2rem; border-radius: 20px; }
+      .about-project {
+        border-radius: 12px;
+        padding: 0.9rem;
+        margin-top: 1.5rem;
+      }
+      .about-project h3 { font-size: 1.2rem; }
+      .about-project p.lead { font-size: 0.95rem; }
+      .project-members table { min-width: 0; font-size: 0.92rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header class="main-header">
+    <h1>🔧 Sanjivani Mechanical Labs <small>· 11 state‑of‑the‑art facilities</small></h1>
+    <div class="subhead">
+      Kopargaon · Department of Mechanical Engineering · Hands‑on innovation since 2001
+    </div>
+  </header>
+
+  <div class="intro-card">
+    <h2>⚙️ Why Mechanical Engineering Labs?</h2>
+    <p style="font-size:1.05rem; line-height:1.6; margin-bottom:0.5rem;">
+      Laboratories are the backbone of engineering education. At Sanjivani, our 11 labs bridge theory and practice — 
+      enabling students to experiment, fail, and innovate in a controlled environment.
+    </p>
+    <div class="intro-grid">
+      <div class="intro-item"><strong>🎯 Purpose & Need</strong><p>Translate theoretical concepts into tangible skills. Develop problem‑solving through real equipment.</p></div>
+      <div class="intro-item"><strong>📈 Advantages</strong><p>Industry‑ready graduates, better retention, team collaboration, and safe exploration of complex systems.</p></div>
+      <div class="intro-item"><strong>🧪 Practical learning</strong><p>Learn by doing — from CAD modelling to IC engine testing, every lab session builds competence.</p></div>
+      <div class="intro-item"><strong>🏛️ Dept. overview</strong><p>Mechanical Engineering at Sanjivani offers 11 specialised labs with 300+ equipment, serving 800+ students annually.</p></div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:0.5rem;">
+    <h3 style="color:#0a2f6c;">🔬 Select a laboratory</h3>
+    <span style="font-size:0.9rem; color:#2c5a8c;">click for full details</span>
+  </div>
+  <div class="lab-grid" id="labTabGrid">
+    <div class="lab-tab active" data-lab="lab1">CAD Lab</div>
+    <div class="lab-tab" data-lab="lab2">Pascals Automation</div>
+    <div class="lab-tab" data-lab="lab3">IoT Lab</div>
+    <div class="lab-tab" data-lab="lab4">3D Printing (Kalam)</div>
+    <div class="lab-tab" data-lab="lab5">Fluid Mechanics</div>
+    <div class="lab-tab" data-lab="lab6">Metallurgy (Curies)</div>
+    <div class="lab-tab" data-lab="lab7">Newton's Machine</div>
+    <div class="lab-tab" data-lab="lab8">Maxwell Thermal‑2</div>
+    <div class="lab-tab" data-lab="lab9">Kelvin Thermal‑1</div>
+    <div class="lab-tab" data-lab="lab10">Workshop</div>
+    <div class="lab-tab" data-lab="lab11">Project Lab</div>
+  </div>
+
+  <div id="lab1" class="lab-detail active">
+    <h2>🖥️ Aaryabhattas CAD Lab</h2>
+    <div class="subtitle">Computer‑Aided Design & Drafting</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What & Why?</strong> CAD lab enables 3D modelling, simulation, and engineering drawings. Essential for design validation before manufacturing.</div>
+        <div class="info-block"><strong>⚡ Need & Importance</strong> Industry standard tools (SolidWorks, CATIA) reduce errors, save cost, and accelerate product development.</div>
+        <div class="info-block"><strong>🧩 Applications</strong> Automotive design, aerospace components, tooling, and FEA analysis.</div>
+        <div class="info-block"><strong>✅ Advantages</strong> Visualisation, quick iteration, integration with 3D printing.<br><strong>⚠️ Disadvantages</strong> High software cost, steep learning curve.</div>
+        <div><strong>🛠️ How to use:</strong> Attend induction, follow lab manual, use workstations with licenced software. <br><strong>📍 When/where:</strong> Timetabled sessions + open projects.</div>
+        <div><strong>🧰 Equipment:</strong> 30 HP workstations, 3D printers, plotter, SolidWorks, AutoCAD, ANSYS.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> No food/drink, cable management, ergonomic chairs, regular software backups.</div>
+        <div><strong>💼 Career:</strong> Design engineer, CAE analyst, product development.</div>
+      </div>
+      <div class="detail-images">
+        <img src="WhatsApp Image 2026-05-14 at 9.54.11 PM.jpeg" alt="CAD Workstations - Front View">
+        <img src="WhatsApp Image 2026-05-14 at 9.54.12 PM.jpeg" alt="CAD Workstations - Back View facing Projector Screen">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab2" class="lab-detail">
+    <h2>⚙️ Pascals Automation Lab</h2>
+    <div class="subtitle">Pneumatics, Hydraulics & PLC</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> Industrial automation using pneumatic, hydraulic, and PLC systems. Simulates real factory lines.</div>
+        <div class="info-block"><strong>🎯 Why & Need:</strong> Automation is core to Industry 4.0; hands-on PLC programming and circuit building.</div>
+        <div class="info-block"><strong>⚙️ Applications:</strong> Conveyor control, robotic grippers, packaging machines.</div>
+        <div><strong>✅ Pros:</strong> Real‑world skills, quick troubleshooting. <strong>Cons:</strong> Air leakage, component cost.</div>
+        <div><strong>🧑‍🔧 How to use:</strong> Follow pneumatic circuit diagrams, use Festo kits, simulate with FluidSIM.</div>
+        <div><strong>🧰 Equipment:</strong> Festo cylinders, Siemens PLC, compressors, solenoid valves.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Lockout/tagout, wear PPE, check pressure before connecting.</div>
+        <div><strong>💼 Career:</strong> Automation engineer, PLC programmer, maintenance.</div>
+      </div>
+      <div class="detail-images">
+        <img src="pascaL_AUTO_1.jpeg" alt="Pascal Workstations - Front View">
+        <img src="pascal_auto_2.jpeg" alt="Pascal Workstations - Back View facing Projector Screen">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab3" class="lab-detail">
+    <h2>📡 IoT Lab</h2>
+    <div class="subtitle">Internet of Things for Mechanical Systems</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> Smart sensors, microcontrollers, cloud data acquisition for mechanical systems.</div>
+        <div class="info-block"><strong>⚡ Need:</strong> Predictive maintenance, remote monitoring, digital twin basics.</div>
+        <div><strong>🧩 Applications:</strong> Vibration monitoring, temperature logging, smart factory.</div>
+        <div><strong>✅ Advantages:</strong> Low‑cost, scalable. <strong>⚠️ Disadvantages:</strong> cybersecurity, sensor calibration.</div>
+        <div><strong>🛠️ How:</strong> Program ESP32/Arduino, connect sensors, upload to cloud.</div>
+        <div><strong>🧰 Equipment:</strong> NodeMCU, DHT22, vibration sensor, Raspberry Pi.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Low voltage, avoid ESD, secure wiring.</div>
+        <div><strong>💼 Career:</strong> IoT developer, automation consultant.</div>
+      </div>
+      <div class="detail-images">
+        <img src="IOT LAB 1.jpeg" alt="IOT KIT">
+        <img src="IOT LAB 2.jpeg" alt="Dashboard">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab4" class="lab-detail">
+    <h2>🖨️ Aaj Abdul Kalam Lab – 3D Printing</h2>
+    <div class="subtitle">Additive Manufacturing & Rapid Prototyping</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> FDM, SLA, resin printing for functional prototypes.</div>
+        <div class="info-block"><strong>🎯 Why?</strong> Fast iteration, complex geometries, reduced waste.</div>
+        <div><strong>🧩 Applications:</strong> Jigs, fixtures, medical models, end‑use parts.</div>
+        <div><strong>✅ Advantages:</strong> Customisation, low‑volume cost. <strong>⚠️ Disadvantages:</strong> layer lines, limited strength.</div>
+        <div><strong>🛠️ How:</strong> Design STL, slice, print, post‑process.</div>
+        <div><strong>🧰 Equipment:</strong> 8 FDM, 2 SLA, wash/cure station.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Fume extraction, avoid hot surfaces, use gloves for resin.</div>
+        <div><strong>💼 Career:</strong> Additive manufacturing engineer, design for AM.</div>
+      </div>
+      <div class="detail-images">
+        <img src="3d_printer_1.jpeg" alt="3d printers">
+        <img src="3d_printer_2.jpeg" alt="printed parts">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab5" class="lab-detail">
+    <h2>💧 Fluid Mechanics Lab</h2>
+    <div class="subtitle">Hydraulics & Fluid Dynamics</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> Study of fluid behaviour, Bernoulli, pipe flow, turbines.</div>
+        <div class="info-block"><strong>⚡ Need:</strong> Design of pumps, piping, hydraulic systems.</div>
+        <div><strong>🧩 Applications:</strong> Water supply, hydro power, HVAC.</div>
+        <div><strong>✅ Advantages:</strong> Visual learning, real data. <strong>⚠️ Disadvantages:</strong> setup time, water handling.</div>
+        <div><strong>🛠️ How:</strong> Use test rigs, measure flow, record readings.</div>
+        <div><strong>🧰 Equipment:</strong> Venturimeter, Pelton wheel, pump test rig, manometers.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Spill control, electrical safety near water, wear non‑slip shoes.</div>
+        <div><strong>💼 Career:</strong> Fluid systems engineer, CFD analyst.</div>
+      </div>
+      <div class="detail-images">
+        <img src="fluid_mech_1.jpeg" alt="flow rig">
+        <img src="fluid_mech_2.jpeg" alt="turbine">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab6" class="lab-detail">
+    <h2>🔬 Curies Metallurgy Lab</h2>
+    <div class="subtitle">Material Science & Testing</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> Microstructure, hardness, tensile testing, heat treatment.</div>
+        <div class="info-block"><strong>⚡ Need:</strong> Select materials, failure analysis, quality control.</div>
+        <div><strong>🧩 Applications:</strong> Aerospace, automotive, manufacturing.</div>
+        <div><strong>✅ Advantages:</strong> Understand material behaviour. <strong>⚠️ Disadvantages:</strong> sample preparation.</div>
+        <div><strong>🛠️ How:</strong> Polish specimen, etch, observe under microscope, perform tests.</div>
+        <div><strong>🧰 Equipment:</strong> UTM, Rockwell hardness, muffle furnace, metallurgical microscope.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Hot surfaces, chemical etchants, wear gloves & goggles.</div>
+        <div><strong>💼 Career:</strong> Metallurgist, quality engineer, failure analyst.</div>
+      </div>
+      <div class="detail-images">
+        <img src="metallurgy_1.jpeg" alt="microscope">
+        <img src="metallurgy_2.jpeg" alt="UTM">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab7" class="lab-detail">
+    <h2>⚡ Newton's Machine Lab</h2>
+    <div class="subtitle">Theory of Machines & Mechanisms</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> Kinematics, dynamics, vibrations, gyroscope, balancing.</div>
+        <div class="info-block"><strong>⚡ Need:</strong> Design of linkages, cams, vibration control.</div>
+        <div><strong>🧩 Applications:</strong> Engine mechanisms, robotics, suspension.</div>
+        <div><strong>✅ Advantages:</strong> Tangible understanding of motion. <strong>⚠️ Disadvantages:</strong> setup complexity.</div>
+        <div><strong>🛠️ How:</strong> Assemble mechanisms, measure displacement, velocity.</div>
+        <div><strong>🧰 Equipment:</strong> Four‑bar linkage, cam follower, gyroscope, vibration shaker.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Rotating parts, secure guards, avoid loose clothing.</div>
+        <div><strong>💼 Career:</strong> Design engineer, robotics, mechanical analyst.</div>
+      </div>
+      <div class="detail-images">
+        <img src="newton_1.jpeg" alt="mechanism">
+        <img src="newton_2.jpeg" alt="gyroscope">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab8" class="lab-detail">
+    <h2>🔥 Maxwell Lab – Thermal Lab 2</h2>
+    <div class="subtitle">Heat Transfer & Refrigeration</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> Conduction, convection, radiation, heat exchangers, refrigeration.</div>
+        <div class="info-block"><strong>⚡ Need:</strong> Design of cooling systems, HVAC, power plants.</div>
+        <div><strong>🧩 Applications:</strong> Radiators, chillers, thermal management.</div>
+        <div><strong>✅ Advantages:</strong> Real thermal data. <strong>⚠️ Disadvantages:</strong> high temperatures.</div>
+        <div><strong>🛠️ How:</strong> Set up experiment, record temperatures, calculate coefficients.</div>
+        <div><strong>🧰 Equipment:</strong> Shell & tube HX, Stefan‑Boltzmann app, refrigeration trainer.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Hot surfaces, refrigerant handling, use gloves.</div>
+        <div><strong>💼 Career:</strong> Thermal engineer, HVAC designer.</div>
+      </div>
+      <div class="detail-images">
+        <img src="maxwell_1.jpeg" alt="HX">
+        <img src="maxwell_2.jpeg" alt="refrigeration">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab9" class="lab-detail">
+    <h2>🌡️ Kelvin Thermal Lab 1</h2>
+    <div class="subtitle">Thermodynamics & IC Engines</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> IC engine performance, steam power, gas turbine.</div>
+        <div class="info-block"><strong>⚡ Need:</strong> Engine efficiency, emission analysis, energy conversion.</div>
+        <div><strong>🧩 Applications:</strong> Automotive, power generation, marine.</div>
+        <div><strong>✅ Advantages:</strong> Hands‑on engine testing. <strong>⚠️ Disadvantages:</strong> exhaust, noise.</div>
+        <div><strong>🛠️ How:</strong> Start engine, apply load, measure fuel consumption.</div>
+        <div><strong>🧰 Equipment:</strong> Single‑cylinder diesel engine, steam boiler, gas analyzer.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Ventilation, hearing protection, no open flames.</div>
+        <div><strong>💼 Career:</strong> IC engine engineer, power plant operator.</div>
+      </div>
+      <div class="detail-images">
+        <img src="kelvin_1.jpeg" alt="engine bed">
+        <img src="kelvin_2.jpeg" alt="steam">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab10" class="lab-detail">
+    <h2>🔨 Workshop</h2>
+    <div class="subtitle">Manufacturing & Fabrication</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> Fitting, welding, machining, carpentry, sheet metal.</div>
+        <div class="info-block"><strong>⚡ Need:</strong> Core manufacturing skills, hands‑on production.</div>
+        <div><strong>🧩 Applications:</strong> Prototyping, repair, tool making.</div>
+        <div><strong>✅ Advantages:</strong> Practical skill development. <strong>⚠️ Disadvantages:</strong> physical effort, hazard.</div>
+        <div><strong>🛠️ How:</strong> Use machines under supervision, follow job sheets.</div>
+        <div><strong>🧰 Equipment:</strong> Lathe, milling, TIG welder, band saw, grinders.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> Goggles, gloves, no loose clothing, machine guards.</div>
+        <div><strong>💼 Career:</strong> Production engineer, machinist, welding inspector.</div>
+      </div>
+      <div class="detail-images">
+        <img src="workkshop_lathe.jpeg" alt="lathe">
+        <img src="welding_workshop.jpeg" alt="welding">
+      </div>
+    </div>
+  </div>
+
+  <div id="lab11" class="lab-detail">
+    <h2>🧪 Project Lab</h2>
+    <div class="subtitle">Innovation & Capstone Projects</div>
+    <div class="detail-grid">
+      <div class="detail-text">
+        <div class="info-block"><strong>📌 What?</strong> Open space for final‑year projects, research, prototyping.</div>
+        <div class="info-block"><strong>⚡ Need:</strong> Encourage innovation, cross‑disciplinary work.</div>
+        <div><strong>🧩 Applications:</strong> Drones, automation, product design.</div>
+        <div><strong>✅ Advantages:</strong> Freedom to experiment. <strong>⚠️ Disadvantages:</strong> resource scheduling.</div>
+        <div><strong>🛠️ How:</strong> Book workstation, use tools, faculty mentorship.</div>
+        <div><strong>🧰 Equipment:</strong> Soldering stations, DSO, laser cutter, 3D printer.</div>
+        <div class="safety-box"><strong>🛡️ Safety:</strong> General workshop safety, supervised access.</div>
+        <div><strong>💼 Career:</strong> R&D engineer, entrepreneur, project lead.</div>
+      </div>
+      <div class="detail-images">
+        <img src="project_lab_1.jpeg" alt="workbench">
+        <img src="project_lab_2.jpeg" alt="prototyping">
+      </div>
+    </div>
+  </div>
+
+  <div class="about-footer">
+    <h3>🏛️ About Mechanical Engineering · Sanjivani</h3>
+    <p>
+      The Department of Mechanical Engineering at Sanjivani College of Engineering, Kopargaon, 
+      established in 2001, offers a comprehensive curriculum with 11 specialised laboratories. 
+      Our labs are equipped with modern instruments and machines to provide hands‑on experience 
+      in design, thermal, fluid, manufacturing, and automation. We emphasise practical learning, 
+      industry collaboration, and innovation. Every lab is designed to nurture problem‑solving 
+      skills and prepare students for careers in engineering, research, and entrepreneurship.
+    </p>
+    <div class="dept-info">
+      <div><strong>📅 Established</strong><br>2001</div>
+      <div><strong>👨‍🏫 Faculty</strong><br>25+ experienced professors</div>
+      <div><strong>🔧 Labs</strong><br>11 dedicated facilities</div>
+      <div><strong>🎓 Students</strong><br>800+ per year</div>
+    </div>
+  </div>
+</div>
+
+<div class="about-project">
+    <div class="project-title">
+      <h3>🏛️ About the Project</h3>
+    </div>
+
+    <p class="lead">
+      This website is developed as a part of the Continuous Internal Assessment (CIA) activity under the course “IT For Engineers (ESIT119)” by students of Second Year, Department of Mechanical Engineering. The project is created for educational and learning purposes using HTML, CSS and JavaScript to enhance technical knowledge, creativity, and practical web development skills.
+    </p>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <strong>Project Title</strong>
+        Mechanical Engineering Labs of Sanjivani College of Engineering
+      </div>
+      <div class="meta-item">
+        <strong>Group Name / Number</strong>
+        MechVerse
+      </div>
+      <div class="meta-item">
+        <strong>Faculty Guide</strong>
+        Prof. Jaydeep Ashtekar<br>
+        <a href="https://www.linkedin.com/in/jaydeep-ashtekar" target="_blank" rel="noopener" style="color:#bfe8ff; text-decoration:none; border-bottom:1px dotted rgba(191,232,255,0.25);">linkedin.com/in/jaydeep-ashtekar</a>
+      </div>
+      <div class="meta-item">
+        <strong>Department</strong>
+        Mechanical Engineering
+      </div>
+      <div class="meta-item">
+        <strong>Academic Year</strong>
+        2025–26
+      </div>
+      <div class="meta-item">
+        <strong>College</strong>
+        Sanjivani College of Engineering, Kopargaon
+      </div>
+    </div>
+
+    <h4 style="margin:0 0 .5rem 0; color:#eaf6ff; font-weight:600;">Group Members</h4>
+    <div class="project-members">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:64px;">Sr No</th>
+            <th>Name of Student</th>
+            <th style="width:160px;">Roll No</th>
+            <th style="width:240px;">LinkedIn Profile</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Nilesh Wagh</td>
+            <td>116</td>
+            <td><a href="#" target="_blank" rel="noopener">linkedin.com/in/nilesh-wagh</a></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Sarthak Wagh</td>
+            <td>118</td>
+            <td><a href="#" target="_blank" rel="noopener">linkedin.com/in/sarthak-wagh</a></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Pratik Walke</td>
+            <td>119</td>
+            <td><a href="#" target="_blank" rel="noopener">linkedin.com/in/pratik-walke</a></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Om jadhav</td>
+            <td>117</td>
+            <td><a href="#" target="_blank" rel="noopener">linkedin.com/in/om-jadhav</a></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Sanket Nirmal</td>
+            <td>120</td>
+            <td><a href="#" target="_blank" rel="noopener">linkedin.com/in/sanket-nirmal</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const tabs = document.querySelectorAll('.lab-tab');
+    const details = document.querySelectorAll('.lab-detail');
+
+    function activateLab(labId) {
+      // hide all details
+      details.forEach(d => d.classList.remove('active'));
+      // deactivate tabs
+      tabs.forEach(t => t.classList.remove('active'));
+      // show selected
+      const targetDetail = document.getElementById(labId);
+      if (targetDetail) targetDetail.classList.add('active');
+      const activeTab = Array.from(tabs).find(t => t.dataset.lab === labId);
+      if (activeTab) activeTab.classList.add('active');
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        const labId = this.dataset.lab;
+        if (labId) activateLab(labId);
+      });
+    });
+
+    // initial: lab1 active
+    activateLab('lab1');
+  })();
+</script>
+
+</body>
+</html>
